@@ -17,13 +17,13 @@ jobs:
           java-version: 21
       - name: Get version from pom.xml
         id: get-version
-        # REPOSITORY: nombre del repositorio
-        # PACKAGE_PATH: ruta de los paquetes de destino
-        # VERSION: versión sacado del fichero POM
         run: |
-          echo "REPOSITORY=${{ github.repository | toLowerCase }}" >> $GITHUB_ENV
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-          echo "PACKAGE_PATH=ghcr.io/${{ github.repository | toLowerCase }}" >> $GITHUB_ENV
+          REPOSITORY=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "REPOSITORY=${REPOSITORY}" >> $GITHUB_ENV
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          PACKAGE_PATH=ghcr.io/${REPOSITORY}
+          echo "PACKAGE_PATH=${PACKAGE_PATH}" >> $GITHUB_ENV
       - name: Show NAMES
         run: |
           echo $REPOSITORY
